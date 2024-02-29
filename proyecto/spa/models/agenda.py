@@ -16,15 +16,15 @@ class Agenda(Base):
 	# user = relationship('User')
 	# service = relationship('Services')
 
-	@validates('service_id')
-	def valid_membership(self, key, service_id):
-		service = Services.query.get(service_id)
-		if not service:
-			raise AssertionError('Service does not exist')
-		user_membership = User.query.get(self.user_id).memberships
-		if 0 <= user_membership < service.membership_id:
-			raise AssertionError('User does not have the membership to get this service')
-		return service_id
+	# @validates('service_id')
+	# def valid_membership(self, key, service_id):
+	# 	service = Services.query.get(service_id)
+	# 	if not service:
+	# 		raise AssertionError('Service does not exist')
+	# 	user_membership = User.query.get(self.user_id).memberships
+	# 	if 0 <= user_membership < service.membership_id:
+	# 		raise AssertionError('User does not have the membership to get this service')
+	# 	return service_id
 	
 	@validates('date')
 	def validate_date(self, key, date):

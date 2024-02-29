@@ -22,12 +22,11 @@ class AgendaService():
 		return self.db.query(Agenda).filter(Agenda.user_id == user_id).first()
 	
 	def update_agenda(self, id: int, agenda: AgendaSchema):
+		agenda.date = datetime.strptime(agenda.date, "%Y-%m-%dT%H:%M:%S")
 		current_agenda = self.get_agenda_by_id(id)
-		current_agenda.title = agenda.title
-		current_agenda.description = agenda.description
+		current_agenda.is_done = agenda.is_done
 		current_agenda.date = agenda.date
-		current_agenda.time = agenda.time
-		current_agenda.user_id = agenda.user_id 
+		current_agenda.service_id = agenda.service_id
 		self.db.commit()
 
 	def delete_agenda(self, id: int):
@@ -38,3 +37,4 @@ class AgendaService():
 		current_agenda = self.get_agenda_by_id(id)
 		current_agenda.is_done = True
 		self.db.commit()
+

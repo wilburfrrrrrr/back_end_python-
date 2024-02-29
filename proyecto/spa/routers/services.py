@@ -21,13 +21,11 @@ async def get_service_data():
 	service = ServicesService(Session()).get_all_services()
 	if not service:
 		return JSONResponse(status_code=404, content={"message": "No service data available"})
-	# return JSONResponse(status_code=200, content=service)
 	return service
 
 @service_router.put("/{id}")
 async def update_service_data(service: ServiceSchema, id: int = Path(..., title="The ID of the service to update")):
-	service = {k: v for k, v in service.dict().items() if v is not None}
-	if not service:
+	if not ServicesService(Session()).get_service_by_id(id):
 		return JSONResponse(status_code=400, content={"message": "Invalid data"})
 	ServicesService.update_service(id, service)
 	return JSONResponse(status_code=200, content={"message": "Service data updated successfully"})
@@ -41,7 +39,6 @@ async def delete_service_data(id: int = Path(..., title="The ID of the service t
 async def get_service_data(id: int = Path(..., title="The ID of the service to get")):
 	service = ServicesService(Session()).get_service(id)
 	if service:
-		# return JSONResponse(status_code=200, content=service)
 		return service
 	return JSONResponse(status_code=404, content={"message": "Service data not found"})
 

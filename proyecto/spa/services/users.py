@@ -1,5 +1,6 @@
 from models.users import User
 from schemas.users import User as UserSchema
+from schemas.auth import Auth as AuthUser
 from utils.hash_password import hash_password, verify_password
 
 class UserService():
@@ -34,8 +35,8 @@ class UserService():
 		self.db.query(User).filter(User.id == id).delete()
 		self.db.commit()
 
-	def authenticate_user(self, email: str, password: str):
-		user = self.get_user_by_email(email)
-		if user and verify_password(password, user.password):
+	async def authenticate_user(self, login: AuthUser):
+		user = self.get_user_by_email(login.email)
+		if user and verify_password(login.password, user.password):
 			return user
 		return None

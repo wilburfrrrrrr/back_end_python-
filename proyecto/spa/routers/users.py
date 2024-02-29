@@ -21,14 +21,12 @@ async def get_user_data():
 	user = UserService(Session()).get_users()
 	if not user:
 		return JSONResponse(status_code=404, content={"message": "No user data available"})
-	# return JSONResponse(status_code=200, content=user)
 	return user
 
 @user_router.put("/{id}")
 async def update_user_data(user: UserSchema, id: int):
 	if not UserService(Session()).get_user(id):
 		return JSONResponse(status_code=400, content={"message": "Invalid data"})
-	print("updating	")
 	UserService(Session()).update_user(id, user)
 	return JSONResponse(status_code=200, content={"message": "User data updated successfully"})
 
@@ -41,15 +39,13 @@ async def delete_user_data(id: int):
 async def get_user_data_by_id(id: int):
 	user = UserService(Session()).get_user(id)
 	if user:
-		# return JSONResponse(status_code=200, content=user)
 		return user
 	return JSONResponse(status_code=404, content={"message": "User not found"})
 
 @user_router.get("/mail/{mail}", response_description="User data retrieved")
 async def get_user_data_by_mail(mail: str):
-	user = UserService(Session()).get_user_by_mail(mail)
+	user = UserService(Session()).get_user_by_email(mail)
 	if user:
-		# return JSONResponse(status_code=200, content=user)
 		return user
 	return JSONResponse(status_code=404, content={"message": "User not found"})
 
