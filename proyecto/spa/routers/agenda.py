@@ -22,10 +22,8 @@ def validate_memberships(user_id, service_id):
 async def add_agenda_data(agenda: AgendaSchema, token: str = Depends(JWTBearer())):
 	user_id = token.get("id")
 	validate_memberships(user_id, agenda.service_id)
-	print("validated")
 	agenda_json = jsonable_encoder(agenda)
 	agenda_json["user_id"] = user_id
-	print(agenda_json)
 	if not agenda_json:
 		return JSONResponse(status_code=400, content={"message": "Invalid data"})
 	AgendaService(Session()).create_agenda(agenda_json)
@@ -53,6 +51,14 @@ async def delete_agenda_data(id: int = Path(..., title="The ID of the agenda to 
 @agenda_router.get("/user/{id}", response_description="Agenda data retrieved")
 async def get_agenda_data_by_user_id(id: int = Path(..., title="The ID of the user to retrieve"), token: str = Depends(JWTBearer())):
 	agenda = AgendaService(Session()).get_agenda_by_user_id(id)
+	if agenda:
+		return agenda
+	return JSONResponse(status_code=404, content={"message": "Agenda not found"})
+
+@agenda_router.get("/user", response_description="Agenda data retrieved")
+async def get_agenda_data_by_user(token: str = Depends(JWTBearer())):
+	user_id = token.get("id")
+	agenda = AgendaService(Session()).get_agenda_by_user_id(user_id)
 	if agenda:
 		return agenda
 	return JSONResponse(status_code=404, content={"message": "Agenda not found"})
