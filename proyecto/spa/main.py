@@ -10,7 +10,7 @@ from routers.memberships import memberships_router
 
 app = FastAPI()
 app.title = "SPA"
-app.version = "2.0"
+app.version = "3.0"
 
 app.add_middleware(ErrorHandler)
 app.include_router(auth_router)

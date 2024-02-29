@@ -7,16 +7,11 @@ from services.agenda import AgendaService
 from services.users import UserService
 from services.services import ServicesService
 from schemas.agenda import Agenda as AgendaSchema
+from utils.validate_memberships import validate_memberships
 
 agenda_router = APIRouter()
 
-def validate_memberships(user_id, service_id):
-	user = UserService(Session()).get_user(user_id)
-	service = ServicesService(Session()).get_service_by_id(service_id)
-	if not user or not service:
-		raise ValueError("User or service not found")
-	if user.memberships < service.membership_id:
-		raise ValueError("User cannot access this service")		
+
 
 @agenda_router.post("/", response_description="Agenda data added into the database")
 async def add_agenda_data(agenda: AgendaSchema, token: str = Depends(JWTBearer())):
