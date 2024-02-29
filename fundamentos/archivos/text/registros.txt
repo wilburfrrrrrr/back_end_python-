@@ -1,0 +1,6 @@
+Jose: 32
+Rodrigo: 29
+Daniela: 19
+Laura: 20
+Andrea: 34
+Mario: 21
